@@ -35,7 +35,7 @@ namespace DataService.Helpers
                 .ForMember(dest => dest.FacultyId, opt => opt.MapFrom(src => src.Faculty.Id));
             expression.CreateMap<PhysicalEntity, StudentDto>()
                 //.ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.Group.Id));
-                .ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => _context.StudentsGroups.Where(x => x.Number == src.Group).FirstOrDefault().Id));
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(src => _context.StudentsGroups.Where(x => x.Number == src.Group).FirstOrDefault().Number));
             expression.CreateMap<StudentsGroup, StudentsGroupDto>()
                 .ForMember(dest => dest.SpecialityId, opt => opt.MapFrom(src => src.Speciality.Id));
 
@@ -50,7 +50,7 @@ namespace DataService.Helpers
             expression.CreateMap<StudentDto, PhysicalEntity>()
                 .IncludeAllDerived()
                 .ForMember(dest => dest.isStudent, opt => opt.MapFrom(src=> true))
-                .ForMember(dest=>dest.Group, opt => opt.MapFrom(src => _context.StudentsGroups.Where(x => x.Id == src.GroupId).FirstOrDefault().Number));
+                .ForMember(dest=>dest.Group, opt => opt.MapFrom(src => _context.StudentsGroups.Where(x => x.Number == src.Group).FirstOrDefault().Number));
             expression.CreateMap<StudentsGroupDto, StudentsGroup>()
                 .IncludeAllDerived()
                 .ForMember(dest => dest.Speciality, opt => opt.MapFrom(src => _context.Specialities.Where(x => x.Id == src.SpecialityId).FirstOrDefault()));

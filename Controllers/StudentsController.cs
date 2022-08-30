@@ -9,6 +9,7 @@ using DataService.Data;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Nancy.Json;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DataService.Controllers
@@ -22,18 +23,14 @@ namespace DataService.Controllers
         public IEnumerable<StudentDto> GetStudentsByGroup(string groupNumber) => _unitOfWork.Students.GetStudentsByGroup(groupNumber).ToList().ConvertToStudentDtoList(_mapper);
         [HttpGet("{recordBookNumber}")]
         public StudentDto GetStudentByRecordBook(string recordBookNumber) => _unitOfWork.Students.GetStudentByRecordBook(recordBookNumber).ConvertToStudentDto(_mapper);
-        [HttpGet("stream")]
-        public StudentsStream GetStudentsByGroups([FromQuery] string groupsNumbers)
+        [HttpGet("stream/{groupsNumbers}")]
+        public StudentsStream GetStudentsByGroups(string groupsNumbers)
         {
-            List<string> groups;
-            try
-            {
-                groups = JsonConvert.DeserializeObject<List<string>>(groupsNumbers);
-            }
-            catch
-            {
-                return null;
-            }
+            JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+            List<string> groups = serializer.Deserialize<List<string>>(groupsNumbers);
+            //dynamic groupsDyn= JsonConvert.DeserializeObject<dynamic>(groupsNumbers);
+            //List<string> groups = groupsDyn.groupsNumbers;
             var result = new StudentsStream();
             foreach (var group in groups)
             {
