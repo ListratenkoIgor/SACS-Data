@@ -46,11 +46,9 @@ namespace DataService.Controllers
             }
             return result;
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet("all")]
         public IEnumerable<StudentDto> GetStudents() => _unitOfWork.Students.GetStudents().ToList().ConvertToStudentDtoList(_mapper);
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public void Post([FromBody] StudentDto value)
         {
@@ -58,7 +56,6 @@ namespace DataService.Controllers
             _unitOfWork.Students.Add(student);
             _unitOfWork.SaveAsync().Wait();
         }
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] StudentDto value)
         {
@@ -67,7 +64,6 @@ namespace DataService.Controllers
             _unitOfWork.SaveAsync().Wait();
 
         }
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

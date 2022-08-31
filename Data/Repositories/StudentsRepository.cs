@@ -25,7 +25,6 @@ namespace DataService.Data.Repositories
         {
             var query =
                from stud in ApplicationDbContext.Entities
-               where stud.isStudent == true
                where stud.Group == groupNumber
                select stud;
             return query;
